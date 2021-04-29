@@ -3,6 +3,7 @@ import VueRouter from 'vue-router'
 import App from '../App'
 import funHome from '../pages/fun-home'
 import modelValidate from '../pages/model-validate'
+import uploadImage from '../pages/upload-image'
 
 Vue.use(VueRouter)
 
@@ -26,6 +27,13 @@ const routes = [
         title: 'modelValidate',
         meta: {},
         component: modelValidate
+      },
+      {
+        path: '/uploadImage',
+        name: 'uploadImage',
+        title: 'uploadImage',
+        meta: {},
+        component: uploadImage
       }
     ]
   },

@@ -2,12 +2,12 @@
   <Modal
     v-model="modalConfig.showModal"
     :title="modalConfig.modalTitle">
-      <ValidationObserver v-slot="{ invalid }">
-        <Form class="class-form" :model="modalConfig.addRow" ref="form" :label-width="modalConfig.labelWidth">
+      <ValidationObserver v-slot="{ invalid }" ref="form">
+        <Form class="class-form" :model="modalConfig.addRow" :label-width="modalConfig.labelWidth">
           <template v-for="(config, configIndex) in modalConfig.config">
             <div :key="configIndex">
               <FormItem v-if="config.type === 'Input'" :label="config.label">
-                <validation-provider :rules="config.validateRules" :name="config.value" v-slot="{ errors }">
+                <ValidationProvider mode="aggressive" :rules="config.validateRules" :name="config.value" v-slot="{ errors }">
                   <Input 
                     v-model="modalConfig.addRow[config.value]" 
                     type="text"
@@ -15,7 +15,11 @@
                     :placeholder="config.placeholder" />
                   <Icon size='12' style="margin-left:2px;color:red" type="ios-medical" />
                   <span style="color:red">{{ errors[0] }}</span>
-                </validation-provider>
+                </ValidationProvider>
+                <ValidationProvider mode="aggressive" rules="required" v-slot="{ errors }">
+                  <input v-model="value" type="text" placeholder="type something" />
+                  <span>{{ errors[0] }}</span>
+                </ValidationProvider>
               </FormItem>
             </div>
           </template>
@@ -32,17 +36,18 @@
   export default {
     data () {
       return {
-        modal1: false
+        modal1: false,
+        value: ''
       }
     },
     props: ['modalConfig'],
-    // watch: {
-    //   'modalConfig.showModal': function (val) {
-    //     if (!val) {
-    //       this.resetValidate()
-    //     }
-    //   },
-    // },
+    watch: {
+      'modalConfig.showModal': function (val) {
+        if (!val) {
+          this.resetValidate()
+        }
+      },
+    },
     methods: {
       resetValidate () {
         this.$nextTick(() => {
